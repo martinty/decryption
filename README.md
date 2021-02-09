@@ -1,4 +1,4 @@
-# Decryption of a massage
+# Decryption of a message
 
 Use the frequency analysis in CTO to identify the transposition cipher in your set. Given
 that the transposition block has 7 characters, find the plaintext. For this task, JCrypTool
