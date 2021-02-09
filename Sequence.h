@@ -24,7 +24,7 @@ class Sequence {
     Sequence() = delete;
     ~Sequence() = default;
     Sequence(int n) {
-        for (int i{0}; i < n; i++) {
+        for (int i = 0; i < n; i++) {
             comb.push_back(i);
         }
         permute(0, comb.size() - 1);

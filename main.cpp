@@ -17,10 +17,10 @@ using namespace std;
 // Columnar transposition
 // Transposition BLOCK has 7 characters
 constexpr int BLOCK = 7;
-constexpr bool DEBUG = true;
+constexpr bool DEBUG = false;
 constexpr bool PRINT = true;
 
-vector<string> loadFile(string filename) {
+vector<string> loadFile(const string& filename) {
     ifstream file{filename};
     if (!file) {
         runtime_error{"Couldn't open file: " + filename};
@@ -45,7 +45,7 @@ vector<string> loadFile(string filename) {
     return msg;
 }
 
-void saveFile(string filename, vector<string> msg) {
+void saveFile(const string& filename, const vector<string>& msg) {
     ofstream file{filename};
     if (!file) {
         runtime_error{"Couldn't open file: " + filename};
@@ -55,7 +55,7 @@ void saveFile(string filename, vector<string> msg) {
     }
 }
 
-string formatLine(string line, vector<int> sequence) {
+string formatLine(const string& line, const vector<int>& sequence) {
     if (DEBUG) {
         set<int> test;
         for (int n : sequence) {
@@ -66,7 +66,7 @@ string formatLine(string line, vector<int> sequence) {
             throw runtime_error{"Incorrect sequence!"};
         }
         if (line.length() != sequence.size()) {
-            throw runtime_error{"Line and sequance is not the same size!"};
+            throw runtime_error{"Line and sequance are not the same size!"};
         }
     }
     string newLine = line;
@@ -99,7 +99,7 @@ vector<string> msgToWords(const vector<string>& msg) {
     return words;
 }
 
-vector<string> loadDict(string filename) {
+vector<string> loadDict(const string& filename) {
     ifstream file{filename};
     if (!file) {
         runtime_error{"Couldn't open file: " + filename};
@@ -142,10 +142,7 @@ vector<int> findCorrectSequence(const vector<string>& msg,
     // vector<int> correctSeq{4, 3, 5, 1, 6, 0, 2};
 
     Sequence generator{BLOCK};
-    vector<vector<int>> everySeq = generator.get();
-
-    vector<string> words;
-    vector<string> msgTest;
+    const vector<vector<int>> everySeq = generator.get();
     vector<int> bestSeq;
     int tries = 0;
     double bestValue = -1;
@@ -154,8 +151,8 @@ vector<int> findCorrectSequence(const vector<string>& msg,
 
     for (const auto& seq : everySeq) {
         tries++;
-        msgTest = decrypt(msg, seq);
-        words = msgToWords(msgTest);
+        vector<string> msgTest = decrypt(msg, seq);
+        vector<string> words = msgToWords(msgTest);
         double value = correctWordsPercent(words, dict, maxWords);
         if (value > bestValue) {
             bestValue = value;
@@ -178,25 +175,26 @@ vector<int> findCorrectSequence(const vector<string>& msg,
         cout << setw(30) << "Correct sequence: " << setw(10) << correctSeq
              << "\n";
     }
+
     return bestSeq;
 }
 
 int main() {
     try {
-        vector<string> msg = loadFile("msg.txt");
-        vector<string> american = loadDict("/usr/share/dict/american-english");
+        const vector<string> msg = loadFile("msg.txt");
+        const vector<string> american =
+            loadDict("/usr/share/dict/american-english");
 
-        auto startTime = chrono::steady_clock::now();
+        const auto startTime = chrono::steady_clock::now();
 
         // Work start
-        vector<int> sequence = findCorrectSequence(msg, american);
+        const vector<int> sequence = findCorrectSequence(msg, american);
         // Work done
 
-        auto endTime = chrono::steady_clock::now();
-        double duration = chrono::duration_cast<std::chrono::milliseconds>(
-                              endTime - startTime)
-                              .count() /
-                          1000.0;
+        const auto endTime = chrono::steady_clock::now();
+        const auto diff =
+            chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
+        const double duration = diff.count() / 1000.0;
 
         if (PRINT) {
             cout << fixed << setprecision(3);
@@ -204,7 +202,7 @@ int main() {
                  << duration << "\n";
         }
 
-        vector<string> msgDecrypted = decrypt(msg, sequence);
+        const vector<string> msgDecrypted = decrypt(msg, sequence);
         saveFile("decrypted.txt", msgDecrypted);
 
     } catch (const std::exception& e) {
