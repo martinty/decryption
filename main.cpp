@@ -15,10 +15,10 @@ using namespace std;
 //------------------------------------------------------------------------------'
 
 // Columnar transposition
-// Transposition block has 7 characters
-constexpr int block = 7;
-constexpr bool debug = true;
-constexpr bool print = true;
+// Transposition BLOCK has 7 characters
+constexpr int BLOCK = 7;
+constexpr bool DEBUG = true;
+constexpr bool PRINT = true;
 
 vector<string> loadFile(string filename) {
     ifstream file{filename};
@@ -31,13 +31,13 @@ vector<string> loadFile(string filename) {
     vector<string> msg;
     for (int i{0}; i < text.length(); i++) {
         line.push_back(text[i]);
-        if (line.length() == block) {
+        if (line.length() == BLOCK) {
             msg.push_back(line);
             line.clear();
         }
     }
     if (!line.empty()) {
-        while (line.length() < block) {
+        while (line.length() < BLOCK) {
             line.push_back(' ');
         }
         msg.push_back(line);
@@ -56,13 +56,13 @@ void saveFile(string filename, vector<string> msg) {
 }
 
 string formatLine(string line, vector<int> sequence) {
-    if (debug) {
+    if (DEBUG) {
         set<int> test;
         for (int n : sequence) {
             test.insert(n);
         }
         if (test.size() != sequence.size() || *test.begin() != 0 ||
-            *(--test.end()) != block - 1) {
+            *(--test.end()) != BLOCK - 1) {
             throw runtime_error{"Incorrect sequence!"};
         }
         if (line.length() != sequence.size()) {
@@ -141,7 +141,7 @@ vector<int> findCorrectSequence(const vector<string>& msg,
                                 const vector<string>& dict) {
     // vector<int> correctSeq{4, 3, 5, 1, 6, 0, 2};
 
-    Sequence generator{block};
+    Sequence generator{BLOCK};
     vector<vector<int>> everySeq = generator.get();
 
     vector<string> words;
@@ -149,22 +149,24 @@ vector<int> findCorrectSequence(const vector<string>& msg,
     vector<int> bestSeq;
     int tries = 0;
     double bestValue = -1;
+    constexpr int maxWords = 10;
+    constexpr double correctness = 80.0;
 
     for (const auto& seq : everySeq) {
         tries++;
         msgTest = decrypt(msg, seq);
         words = msgToWords(msgTest);
-        double value = correctWordsPercent(words, dict, 10);
+        double value = correctWordsPercent(words, dict, maxWords);
         if (value > bestValue) {
             bestValue = value;
             bestSeq = seq;
-            if (bestValue > 80) {
+            if (bestValue > correctness) {
                 break;
             }
         }
     }
 
-    if (print) {
+    if (PRINT) {
         cout << fixed << setprecision(2);
         cout << setw(30) << "Sequences tried: " << setw(10) << tries << "\n"
              << setw(30) << "Correct enligsh in %: " << setw(10) << bestValue
@@ -196,7 +198,7 @@ int main() {
                               .count() /
                           1000.0;
 
-        if (print) {
+        if (PRINT) {
             cout << fixed << setprecision(3);
             cout << setw(30) << "Elapsed time in seconds: " << setw(10)
                  << duration << "\n";
