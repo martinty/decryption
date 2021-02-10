@@ -8,13 +8,12 @@ vector<string> loadFile(const string& filename) {
     string text;
     string line;
     vector<string> msg;
-    while (getline(file, text)) {
-        for (int i{0}; i < text.length(); i++) {
-            line.push_back(text[i]);
-            if (line.length() == BLOCK) {
-                msg.push_back(line);
-                line.clear();
-            }
+    getline(file, text);
+    for (int i{0}; i < text.length(); i++) {
+        line.push_back(text[i]);
+        if (line.length() == BLOCK) {
+            msg.push_back(line);
+            line.clear();
         }
     }
     if (!line.empty()) {
@@ -138,7 +137,7 @@ vector<int> findCorrectSequence(const vector<string>& msg,
         if (value > bestValue) {
             bestValue = value;
             bestSeq = seq;
-            if (bestValue > correctness) {
+            if (bestValue >= correctness) {
                 break;
             }
         }
