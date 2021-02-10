@@ -30,13 +30,13 @@ void saveFile(const string& filename, const vector<string>& msg) {
     if (!file) {
         runtime_error{"Couldn't open file: " + filename};
     }
-    for (const string& word : msg) {
-        file << word;
+    for (const string& line : msg) {
+        file << line;
     }
 }
 
 string formatLine(const string& line, const vector<int>& sequence) {
-    if (DEBUG) {
+    if (debug) {
         set<int> test;
         for (int n : sequence) {
             test.insert(n);
@@ -143,7 +143,7 @@ vector<int> findCorrectSequence(const vector<string>& msg,
         }
     }
 
-    if (PRINT) {
+    if (print) {
         cout << fixed << setprecision(2);
         cout << setw(30) << "Sequences tried: " << setw(10) << tries << "\n"
              << setw(30) << "Correct enligsh in %: " << setw(10) << bestValue

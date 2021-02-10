@@ -25,7 +25,7 @@ int main() {
             chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
         const double duration = diffTime.count() / 1000.0;
 
-        if (PRINT) {
+        if (print) {
             cout << fixed << setprecision(3);
             cout << setw(30) << "Elapsed time in seconds: " << setw(10)
                  << duration << "\n";

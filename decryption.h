@@ -14,8 +14,8 @@ using namespace std;
 // Columnar transposition
 // Transposition BLOCK has 7 characters
 constexpr int BLOCK = 7;
-constexpr bool DEBUG = false;
-constexpr bool PRINT = true;
+constexpr bool debug = false;
+constexpr bool print = true;
 
 vector<string> loadFile(const string& filename);
 void saveFile(const string& filename, const vector<string>& msg);
