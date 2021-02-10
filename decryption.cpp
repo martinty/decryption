@@ -6,14 +6,15 @@ vector<string> loadFile(const string& filename) {
         runtime_error{"Couldn't open file: " + filename};
     }
     string text;
-    getline(file, text);
     string line;
     vector<string> msg;
-    for (int i{0}; i < text.length(); i++) {
-        line.push_back(text[i]);
-        if (line.length() == BLOCK) {
-            msg.push_back(line);
-            line.clear();
+    while (getline(file, text)) {
+        for (int i{0}; i < text.length(); i++) {
+            line.push_back(text[i]);
+            if (line.length() == BLOCK) {
+                msg.push_back(line);
+                line.clear();
+            }
         }
     }
     if (!line.empty()) {

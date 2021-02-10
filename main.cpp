@@ -12,19 +12,18 @@ using namespace std;
 int main() {
     try {
         const vector<string> msg = loadFile("msg.txt");
-        const vector<string> american =
-            loadDict("/usr/share/dict/american-english");
+        const vector<string> dict = loadDict("american-english");
 
         const auto startTime = chrono::steady_clock::now();
 
         // Work start
-        const vector<int> sequence = findCorrectSequence(msg, american);
+        const vector<int> sequence = findCorrectSequence(msg, dict);
         // Work done
 
         const auto endTime = chrono::steady_clock::now();
-        const auto diff =
+        const auto diffTime =
             chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
-        const double duration = diff.count() / 1000.0;
+        const double duration = diffTime.count() / 1000.0;
 
         if (PRINT) {
             cout << fixed << setprecision(3);
@@ -33,10 +32,12 @@ int main() {
         }
 
         const vector<string> msgDecrypted = decrypt(msg, sequence);
-        saveFile("decrypted.txt", msgDecrypted);
+        saveFile("msg-decrypted.txt", msgDecrypted);
 
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << '\n';
+    } catch (const exception& e) {
+        cerr << "Error: " << e.what() << '\n';
+    } catch (...) {
+        cerr << "Unknown error!\n";
     }
 
     return 0;
