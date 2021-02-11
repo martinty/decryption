@@ -2,7 +2,6 @@
 
 #include <assert.h>
 
-#include <exception>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
