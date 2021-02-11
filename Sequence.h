@@ -6,11 +6,12 @@
 
 class Sequence {
    private:
-    std::vector<std::vector<int>> seq;
+    std::vector<std::vector<int>> seqs;
     std::vector<int> comb;
+    int size = 0;
     void permute(int l, int r) {
         if (l == r)
-            seq.push_back(comb);
+            seqs.push_back(comb);
         else {
             for (int i = l; i <= r; i++) {
                 std::swap(comb[l], comb[i]);
@@ -21,13 +22,17 @@ class Sequence {
     }
 
    public:
-    Sequence() = delete;
+    Sequence() = default;
     ~Sequence() = default;
-    Sequence(int n) {
+    Sequence(int n) { generate(n); }
+    void generate(int n) {
+        seqs.clear();
+        comb.clear();
         for (int i = 0; i < n; i++) {
             comb.push_back(i);
         }
         permute(0, comb.size() - 1);
+        size = seqs.size();
     }
-    std::vector<std::vector<int>> get() { return seq; }
+    std::vector<std::vector<int>> get() const { return seqs; }
 };

@@ -1,12 +1,4 @@
-#include "decryption.h"
-
-#include <assert.h>
-
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <set>
-#include <sstream>
+#include "Decryption.h"
 
 vector<string> loadFile(const string& filename) {
     ifstream file{filename};
