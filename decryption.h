@@ -1,9 +1,3 @@
-#include <exception>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <set>
-#include <sstream>
 #include <string>
 #include <vector>
 
@@ -14,8 +8,7 @@ using namespace std;
 // Columnar transposition
 // Transposition BLOCK has 7 characters
 constexpr int BLOCK = 7;
-constexpr bool debug = false;
-constexpr bool print = true;
+constexpr bool PRINT = true;
 
 vector<string> loadFile(const string& filename);
 void saveFile(const string& filename, const vector<string>& msg);

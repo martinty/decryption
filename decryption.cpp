@@ -1,10 +1,17 @@
 #include "decryption.h"
 
+#include <assert.h>
+
+#include <exception>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <set>
+#include <sstream>
+
 vector<string> loadFile(const string& filename) {
     ifstream file{filename};
-    if (!file) {
-        runtime_error{"Couldn't open file: " + filename};
-    }
+    assert(file.good());
     string text;
     string line;
     vector<string> msg;
@@ -27,28 +34,22 @@ vector<string> loadFile(const string& filename) {
 
 void saveFile(const string& filename, const vector<string>& msg) {
     ofstream file{filename};
-    if (!file) {
-        runtime_error{"Couldn't open file: " + filename};
-    }
+    assert(file.good());
     for (const string& line : msg) {
         file << line;
     }
 }
 
 string formatLine(const string& line, const vector<int>& sequence) {
-    if (debug) {
-        set<int> test;
-        for (int n : sequence) {
-            test.insert(n);
-        }
-        if (test.size() != sequence.size() || *test.begin() != 0 ||
-            *(--test.end()) != BLOCK - 1) {
-            throw runtime_error{"Incorrect sequence!"};
-        }
-        if (line.length() != sequence.size()) {
-            throw runtime_error{"Line and sequance are not the same size!"};
-        }
+#ifdef DEBUG
+    set<int> test;
+    for (int n : sequence) {
+        test.insert(n);
     }
+    assert(test.size() == sequence.size());
+    assert(*test.begin() == 0);
+    assert(*(--test.end()) == sequence.size() - 1);
+#endif
     string newLine = line;
     for (int i{0}; i < line.length(); i++) {
         newLine[i] = line[sequence[i]];
@@ -81,9 +82,7 @@ vector<string> msgToWords(const vector<string>& msg) {
 
 vector<string> loadDict(const string& filename) {
     ifstream file{filename};
-    if (!file) {
-        runtime_error{"Couldn't open file: " + filename};
-    }
+    assert(file.good());
     vector<string> dict;
     string word;
     while (getline(file, word)) {
@@ -143,7 +142,7 @@ vector<int> findCorrectSequence(const vector<string>& msg,
         }
     }
 
-    if (print) {
+    if (PRINT) {
         cout << fixed << setprecision(2);
         cout << setw(30) << "Sequences tried: " << setw(10) << tries << "\n"
              << setw(30) << "Correct enligsh in %: " << setw(10) << bestValue
