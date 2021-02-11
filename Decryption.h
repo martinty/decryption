@@ -35,8 +35,9 @@ class Decryption {
     vector<string> originalMsg;
     vector<string> solvedMsg;
     vector<int> bestSeq;
-    double bestValue;
-    int tries;
+    double bestValue = -1;
+    int tries = 0;
+    int rows;
 
     string formatLine(const string& line, const vector<int>& seq) {
 #ifdef DEBUG
@@ -133,6 +134,7 @@ class Decryption {
             }
             originalMsg.push_back(line);
         }
+        rows = originalMsg.size();
     }
     void saveMsg(const string& filename) const {
         ofstream file{filename};
